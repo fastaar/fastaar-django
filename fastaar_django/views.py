@@ -5,7 +5,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
 
 from fastaar import FastaarClient, WebhookSignature, FastaarException
-from fastaar_django.signals import webhook_received, payment_completed
+from fastaar_django.signals import webhook_received, payment_completed, payment_refunded
 
 
 def get_fastaar_client() -> FastaarClient:
@@ -60,6 +60,15 @@ def webhook_view(request: HttpResponse) -> HttpResponse:
     # Trigger payment completed signal
     if event_name == "payment.completed":
         payment_completed.send(
+            sender=None,
+            invoice_number=event_data.get("invoice_number"),
+            payment_id=event_data.get("id"),
+            data=event_data,
+        )
+
+    # Trigger payment refunded signal
+    if event_name == "payment.refunded":
+        payment_refunded.send(
             sender=None,
             invoice_number=event_data.get("invoice_number"),
             payment_id=event_data.get("id"),

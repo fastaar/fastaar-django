@@ -2,7 +2,7 @@
 
 Integrate bKash & Nagad payments seamlessly into your Django website/application via Fastaar.
 
-This Django app wraps the `fastaar-python` SDK, exposes standard webhook views (CSRF-exempt and signature-verified), and dispatches Django signals when payments are completed.
+This Django app wraps the `fastaar-python` SDK, exposes standard webhook views (CSRF-exempt and signature-verified), and dispatches Django signals when payments are completed or refunded.
 
 ## Install
 
@@ -52,15 +52,17 @@ The plugin automatically verifies incoming webhook signatures and raises custom 
 
 ```python
 from django.dispatch import receiver
-from fastaar_django.signals import payment_completed, webhook_received
+from fastaar_django.signals import payment_completed, payment_refunded, webhook_received
 
 @receiver(payment_completed)
 def handle_payment_completed(sender, invoice_number, payment_id, data, **kwargs):
     # invoice_number matches your internal ORDER-42 identifier
     # payment_id matches the Fastaar payment ID (e.g., 01jxyz...)
-    
-    # Mark the order as paid in your database, idempotently
     print(f"Order {invoice_number} successfully paid. Fastaar payment ID: {payment_id}")
+
+@receiver(payment_refunded)
+def handle_payment_refunded(sender, invoice_number, payment_id, data, **kwargs):
+    print(f"Order {invoice_number} refunded. Fastaar payment ID: {payment_id}")
 
 @receiver(webhook_received)
 def handle_any_webhook(sender, event_name, data, **kwargs):
@@ -90,6 +92,10 @@ payment = fastaar.create_payment({
 
 # Redirect user to checkout url
 checkout_url = payment['checkout_url']
+
+# Refund a completed payment
+payment = fastaar.refund_payment(payment_id)
+# payment['status'] == 'refunded'
 ```
 
 ## Customers
