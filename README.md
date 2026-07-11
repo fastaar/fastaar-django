@@ -31,6 +31,10 @@ FASTAAR_WEBHOOK_SECRET = 'whsec_...'  # Your merchant webhook secret
 FASTAAR_TIMEOUT = 15                  # Optional (defaults to 15)
 ```
 
+Keys are scoped to abilities (`payments:read`/`write`/`refund`, `customers:read`/`write`) and can have an
+expiry date, set in the merchant panel. Calls outside the key's abilities return `403 ability_denied`;
+calls with an expired key return `401 authentication_error`.
+
 ## Setup Webhook Route
 
 In your main `urls.py`, register the Fastaar webhook URL:
