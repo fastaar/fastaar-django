@@ -90,6 +90,7 @@ fastaar = get_fastaar_client()
 payment = fastaar.create_payment({
     'amount': 1250,
     'invoice_number': 'ORDER-42',               # required — your order reference
+    'customer_id': customer['id'] if customer else None, # optional — attach an existing customer
     'success_url': 'https://shop.example.com/thanks',
     'cancel_url': 'https://shop.example.com/cart',
 })
@@ -97,10 +98,19 @@ payment = fastaar.create_payment({
 # Redirect user to checkout url
 checkout_url = payment['checkout_url']
 
-# Refund a completed payment
+# Refund a completed (or partially refunded) payment
 payment = fastaar.refund_payment(payment_id)
 # payment['status'] == 'refunded'
+
+partial = fastaar.refund_payment(payment_id, 200)  # refund only part of it
+# partial['status'] == 'partially_refunded'
+
+refunds = fastaar.list_refunds(payment_id)  # full refund history, newest first
 ```
+
+`invoice_number` is idempotent: if a payment already exists for it and hasn't reached `failed`
+or `expired`, creating another one raises a `FastaarException` with error type
+`duplicate_invoice_number` (HTTP 409) instead of creating a duplicate.
 
 ## Customers
 
