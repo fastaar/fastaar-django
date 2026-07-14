@@ -7,22 +7,21 @@ name = "fastaar-django"
 version = "1.0.1"
 description = "Django integration for the Fastaar payment gateway — accept bKash & Nagad payments in Bangladesh."
 readme = "README.md"
-requires-python = ">=3.8"
+requires-python = ">=3.9"
 license = { text = "MIT" }
 classifiers = [
     "Framework :: Django",
-    "Framework :: Django :: 3.2",
-    "Framework :: Django :: 4.0",
-    "Framework :: Django :: 4.1",
     "Framework :: Django :: 4.2",
     "Framework :: Django :: 5.0",
+    "Framework :: Django :: 5.1",
+    "Framework :: Django :: 5.2",
     "Programming Language :: Python :: 3",
     "License :: OSI Approved :: MIT License",
     "Operating System :: OS Independent",
 ]
 dependencies = [
-    "django>=3.2",
-    "fastaar-python @ git+https://github.com/fastaar/fastaar-python.git",
+    "django>=4.2",
+    "fastaar-python>=1.0.3",
 ]
 
 [project.optional-dependencies]
