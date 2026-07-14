@@ -1,5 +1,9 @@
 # Fastaar Django Plugin
 
+[![CI](https://github.com/fastaar/fastaar-django/actions/workflows/ci.yml/badge.svg)](https://github.com/fastaar/fastaar-django/actions/workflows/ci.yml)
+[![PyPI](https://img.shields.io/pypi/v/fastaar-django.svg)](https://pypi.org/project/fastaar-django/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Integrate bKash & Nagad payments seamlessly into your Django website/application via Fastaar.
 
 This Django app wraps the `fastaar-python` SDK, exposes standard webhook views (CSRF-exempt and signature-verified), and dispatches Django signals when payments are completed or refunded.
